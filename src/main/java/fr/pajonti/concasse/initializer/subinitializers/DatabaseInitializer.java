@@ -80,7 +80,7 @@ public class DatabaseInitializer {
      * Insere les donnees de base dans la BDD H2
      */
     private void injectStaticDataInDB() throws IOException, SQLException {
-        System.out.println("Injection de la structure de base...");
+        System.out.println("Injection des données statiques en base...");
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("sql/initialize_data.sql")) {
             if(is == null){
                 throw new IOException("Impossible de lire le fichier d'initialisation des données de la BDD");

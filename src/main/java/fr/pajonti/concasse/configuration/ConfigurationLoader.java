@@ -1,5 +1,6 @@
 package fr.pajonti.concasse.configuration;
 
+import fr.pajonti.concasse.helper.technical.ExitHandlerHelper;
 import fr.pajonti.concasse.initializer.subinitializers.ConfigurationInitializer;
 import fr.pajonti.concasse.initializer.MainInitializer;
 
@@ -31,18 +32,12 @@ public class ConfigurationLoader {
                 return initializer.getConfiguration();
             }
             else{
-                return loadFromDisk();
+                return new Configuration(config);
             }
         }
         catch (IOException | SQLException e){
-            System.out.println("Erreur lors du chargement de la configuration.");
-            System.out.println(e.getMessage());
+            ExitHandlerHelper.exit("Erreur lors du chargement de la configuration : " + e.getMessage());
             return null;
         }
-    }
-
-    private static Configuration loadFromDisk(){
-        //TODO : Implementer le bouzin
-        return null;
     }
 }
