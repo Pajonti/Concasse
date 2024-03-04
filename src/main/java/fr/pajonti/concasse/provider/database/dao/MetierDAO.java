@@ -9,12 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MetierDAO extends DatabaseDAO {
-    public MetierDAO(Configuration configuration) {
+    public MetierDAO(Configuration configuration) throws SQLException {
         super(configuration);
     }
 
+    @Override
+    protected void finalize(){
+        try{
+            this.connection.close();
+        }
+        catch (SQLException se){
+            //Do nothing
+        }
+    }
+
     public List<MetierDTO> getMetiersList() throws SQLException {
-        Connection connection = DriverManager.getConnection(this.jdbcURL, this.username, this.password);
         Statement statement = connection.createStatement();
 
         List<MetierDTO> liste = new ArrayList<>();
@@ -24,8 +33,6 @@ public class MetierDAO extends DatabaseDAO {
         while(rs.next()){
             liste.add(new MetierDTO(rs.getInt("METIER_ID"), rs.getString("METIER_LABEL")));
         }
-
-        connection.close();
 
         return liste;
     }

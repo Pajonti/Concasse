@@ -9,8 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NiveauMetierDAO extends DatabaseDAO {
-    public NiveauMetierDAO(Configuration configuration) {
+    public NiveauMetierDAO(Configuration configuration) throws SQLException {
         super(configuration);
+    }
+
+    @Override
+    protected void finalize(){
+        try{
+            this.connection.close();
+        }
+        catch (SQLException se){
+            //Do nothing
+        }
     }
 
     public NiveauMetierDTO getNiveauMetierByMetierIDAndServerId(int metierID, int serverID) throws SQLException {

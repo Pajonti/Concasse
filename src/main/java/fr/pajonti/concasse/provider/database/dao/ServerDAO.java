@@ -10,8 +10,18 @@ import java.util.List;
 
 public class ServerDAO extends DatabaseDAO {
 
-    public ServerDAO(Configuration configuration) {
+    public ServerDAO(Configuration configuration) throws SQLException {
         super(configuration);
+    }
+
+    @Override
+    protected void finalize(){
+        try{
+            this.connection.close();
+        }
+        catch (SQLException se){
+            //Do nothing
+        }
     }
 
     public List<ServerDTO> getServerList() throws SQLException {

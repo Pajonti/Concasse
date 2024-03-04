@@ -17,6 +17,7 @@ public class ExternalItemDTO {
     private Integer priceOne;
     private Integer priceTen;
     private Integer priceHundred;
+    private LocalDateTime priceUpdateTimestamp;
     private Integer level;
     private Integer typeId;
     private List<StatItemDTO> statItemList;
@@ -120,5 +121,17 @@ public class ExternalItemDTO {
 
     public void setBrifusUpdateDate(LocalDateTime brifusUpdateDate) {
         this.brifusUpdateDate = brifusUpdateDate;
+    }
+
+    public LocalDateTime getPriceUpdateTimestamp() {
+        return priceUpdateTimestamp;
+    }
+
+    public void setPriceUpdateTimestamp(LocalDateTime priceUpdateTimestamp) {
+        this.priceUpdateTimestamp = priceUpdateTimestamp;
+    }
+
+    public boolean estCraftable() {
+       return this.getRecipeString() != null && !this.getRecipeString().trim().isEmpty();
     }
 }
