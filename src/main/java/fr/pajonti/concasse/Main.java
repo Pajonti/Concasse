@@ -5,6 +5,7 @@ import fr.pajonti.concasse.activities.AccueilUserActivity;
 import fr.pajonti.concasse.configuration.Configuration;
 import fr.pajonti.concasse.configuration.ConfigurationLoader;
 import fr.pajonti.concasse.provider.database.dto.ServerDTO;
+import fr.pajonti.concasse.provider.external.dao.VulbisDAO;
 
 import java.io.IOException;
 import java.sql.*;

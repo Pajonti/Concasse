@@ -22,6 +22,8 @@
         <hibernate.version>5.6.15.Final</hibernate.version>
         <mustache.version>0.9.11</mustache.version>
         <jackson.version>2.16.1</jackson.version>
+        <jsoup.version>1.17.2</jsoup.version>
+        <guava.version>33.0.0-jre</guava.version>
 
         <!-- Plugins -->
         <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
@@ -55,6 +57,20 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- JSoup XML handling -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+
+        <!-- Guava for additional helpers -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
     </dependencies>
