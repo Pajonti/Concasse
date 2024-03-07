@@ -37,9 +37,9 @@ public class BrifusDAO {
         for(ExternalItemDTO itemInitial : this.listeInitialeItems){
             ExternalItemDTO itemEnrichi = enrichirItemWithTauxBrisage(itemInitial);
 
-            if(itemEnrichi != null){
-                listeEnrichie.add(itemEnrichi);
-            }
+            listeEnrichie.add(itemEnrichi);
+
+            System.out.println("Lecture de l'objet " + itemInitial.getItemName() + " dans Brifus terminée.");
         }
 
         return listeEnrichie;
@@ -48,8 +48,8 @@ public class BrifusDAO {
     private ExternalItemDTO enrichirItemWithTauxBrisage(ExternalItemDTO itemInitial) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        try{
-            if(itemInitial.estCraftable()){
+        if(itemInitial.estCraftable() && itemInitial.isEstConcassable() && itemInitial.possedeStats()){
+            try{
                 URL urlCoeff = new URL("https://api.brifus.fr/coeff");
 
                 HttpURLConnection connCoeff = (HttpURLConnection) urlCoeff.openConnection();
@@ -77,26 +77,30 @@ public class BrifusDAO {
                     JsonNode rootNode = objectMapper.readTree(response.toString());
 
                     if(rootNode.path("coefficient") != null){
-                        String dateTime = "";
                         if(rootNode.path("dateTime") != null){
-                            dateTime = "(Valeur du " +  rootNode.path("dateTime").asText() + ")";
                             itemInitial.setBrifusUpdateDate(LocalDateTime.from(df.parse(rootNode.path("dateTime").asText())));
                         }
 
                         Double tx = rootNode.path("coefficient").asDouble();
                         itemInitial.setTauxBrisage(tx.floatValue());
                     }
-                }
-                catch(IOException ioe){
 
+                    return itemInitial;
+                }
+                catch (IOException ioe){
+                    System.err.println("Erreur lors du polling de l'item " + itemInitial.getItemName());
+                    return itemInitial;
                 }
             }
+            catch (IOException ioe){
+                ioe.printStackTrace();
+                ExitHandlerHelper.exit("Erreur lors de la collecte des infos Brifus : " + ioe.getMessage());
+            }
         }
-        catch (IOException ioe){
-            ioe.printStackTrace();
-            ExitHandlerHelper.exit("Erreur lors de la collecte des infos Brifus : " + ioe.getMessage());
+        else{
+            return itemInitial;
         }
 
-        return itemInitial;
+        return null;
     }
 }

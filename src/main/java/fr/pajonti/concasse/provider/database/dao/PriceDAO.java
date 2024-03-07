@@ -24,11 +24,11 @@ public class PriceDAO extends DatabaseDAO {
 
     public void register(PriceDTO dto) throws SQLException {
 
-        DateTimeFormatter dtfInsertion = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
-        String timestampInsertion = "{ts '" + dtfInsertion.format(dto.getRefreshTimestamp()) + "'}";
+        DateTimeFormatter dtfInsertion = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String timestampInsertion = dtfInsertion.format(dto.getRefreshTimestamp());
 
-        DateTimeFormatter dtfRefreshPrice = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
-        String timestampRefresh = "{ts '" + dtfRefreshPrice.format(dto.getPriceUpdateTimestamp()) + "'}";
+        DateTimeFormatter dtfRefreshPrice = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String timestampRefresh = dtfRefreshPrice.format(dto.getPriceUpdateTimestamp());
 
         Statement statement = connection.createStatement();
         statement.executeUpdate("MERGE INTO PRICE " +
@@ -40,8 +40,8 @@ public class PriceDAO extends DatabaseDAO {
                                             + (dto.getPriceOne() == null ? "null" : dto.getPriceOne()) + ", "
                                             + (dto.getPriceTen() == null ? "null" : dto.getPriceTen()) + ", "
                                             + (dto.getPriceHundred() == null ? "null" : dto.getPriceHundred()) + ", "
-                                            + timestampInsertion + ", "
-                                            + timestampRefresh
+                                            + "'" + timestampInsertion + "', "
+                                            + "'" + timestampRefresh + "'"
                                         + ");");
         statement.close();
     }

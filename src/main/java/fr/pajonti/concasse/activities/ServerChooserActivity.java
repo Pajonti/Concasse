@@ -2,6 +2,7 @@ package fr.pajonti.concasse.activities;
 
 import fr.pajonti.concasse.configuration.Configuration;
 import fr.pajonti.concasse.helper.technical.ExitHandlerHelper;
+import fr.pajonti.concasse.helper.technical.StringHelper;
 import fr.pajonti.concasse.helper.technical.UserInputHelper;
 import fr.pajonti.concasse.provider.database.dao.ServerDAO;
 import fr.pajonti.concasse.provider.database.dto.ServerDTO;
@@ -23,12 +24,8 @@ public class ServerChooserActivity {
             List<ServerDTO> serverDTOList = new ServerDAO(configuration).getServerList();
 
             for(ServerDTO server : serverDTOList){
-                StringBuilder serverDisplay = new StringBuilder("||    " + server.getServerID() + ". " + server.getNom());
-                while(serverDisplay.length() < 77){
-                    serverDisplay.append(" ");
-                }
-                serverDisplay.append("||");
-                System.out.println(serverDisplay.toString());
+                String serverStr = "   ".concat(server.getServerID().toString()).concat(". ").concat(server.getNom());
+                System.out.println("||" + StringHelper.padWithCharacter(serverStr, 75, " ", 2) + "||");
             }
 
             System.out.println("|| ========================================================================= ||");

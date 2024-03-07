@@ -25,7 +25,6 @@ public class ServerDAO extends DatabaseDAO {
     }
 
     public List<ServerDTO> getServerList() throws SQLException {
-        Connection connection = DriverManager.getConnection(this.jdbcURL, this.username, this.password);
         Statement statement = connection.createStatement();
 
         List<ServerDTO> liste = new ArrayList<>();
@@ -35,8 +34,6 @@ public class ServerDAO extends DatabaseDAO {
         while(rs.next()){
             liste.add(new ServerDTO(rs.getInt("SERVER_ID"), rs.getString("NOM"), rs.getInt("BRIFUS_ID")));
         }
-
-        connection.close();
 
         return liste;
     }

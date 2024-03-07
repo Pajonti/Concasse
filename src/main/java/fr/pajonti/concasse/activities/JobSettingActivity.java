@@ -38,7 +38,7 @@ public class JobSettingActivity {
 
                 int choix = UserInputHelper.readUserInputAsInteger();
 
-                if(choix == 99){
+                if(choix == 0){
                     done = true;
                 }
                 else{
@@ -105,7 +105,7 @@ public class JobSettingActivity {
                 }
             }
             System.out.println("|| ------------------------------------------------------------------------- ||");
-            System.out.println("||  99      ||  Modifications terminées                                      ||");
+            System.out.println("||  0       ||  Modifications terminées                                      ||");
             System.out.println("|| ========================================================================= ||");
             System.out.println(" ");
 

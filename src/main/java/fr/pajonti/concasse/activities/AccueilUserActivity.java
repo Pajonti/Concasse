@@ -21,7 +21,7 @@ public class AccueilUserActivity {
 
             switch (choix){
                 case 1:
-                    DataRefreshActivity.refreshData(serverDTO, configuration);
+                    DataRefreshActivity.showMenu(serverDTO, configuration);
                     break;
                 case 2 :
                     JobSettingActivity.setJobs(serverDTO, configuration);
@@ -67,7 +67,7 @@ public class AccueilUserActivity {
         System.out.println("|| ========================================================================= ||");
         System.out.println("||                                 Paramètres                                ||");
         System.out.println("|| ------------------------------------------------------------------------- ||");
-        System.out.println("||   1. Rafraîchissement des prix et taux (Dernière exécution : " + StringHelper.padWithCharacter(getLastPollingDate(serverDTO), 10, " ", 2) + ")  ||");
+        System.out.println("||   1. Rafraîchissement des données (prix, taux de concassage et stats)     ||");
         System.out.println("||   2. Réglage des métiers exercés                                          ||");
         System.out.println("||                                                                           ||");
         System.out.println("||                                                                           ||");
@@ -83,12 +83,4 @@ public class AccueilUserActivity {
         System.out.println("|| ========================================================================= ||");
         System.out.println(" ");
     }
-
-    private static String getLastPollingDate(ServerDTO serverDTO) {
-        //TODO : Implementer la derniere date de collecte des donnees via un DTO
-
-        return "21/12/2006";
-    }
-
-
 }

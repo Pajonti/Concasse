@@ -4,6 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.pajonti.concasse.configuration.Configuration;
 import fr.pajonti.concasse.helper.technical.ExitHandlerHelper;
+import fr.pajonti.concasse.helper.technical.StringHelper;
+import fr.pajonti.concasse.helper.technical.UserInputHelper;
+import fr.pajonti.concasse.provider.database.dao.GenericDAO;
+import fr.pajonti.concasse.provider.database.dao.NiveauMetierDAO;
+import fr.pajonti.concasse.provider.database.dto.MetierDTO;
+import fr.pajonti.concasse.provider.database.dto.NiveauMetierDTO;
 import fr.pajonti.concasse.provider.database.dto.ServerDTO;
 import fr.pajonti.concasse.provider.database.dto.StatItemDTO;
 import fr.pajonti.concasse.provider.external.dao.BrifusDAO;
@@ -19,6 +25,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -27,29 +34,109 @@ public class DataRefreshActivity {
     static Configuration activityConfiguration = null;
     static ServerDTO server = null;
 
-    public static void refreshData(ServerDTO serverDTO, Configuration configuration){
-        activityConfiguration = configuration;
-        server = serverDTO;
+    public static void showMenu(ServerDTO serverDTO, Configuration configuration){
+        try{
+            server = serverDTO;
+            activityConfiguration = configuration;
 
-        System.out.println("Rafraîchissement des données pour le serveur " + serverDTO.getNom() + ". Cette opération " +
-                "va prendre une vingtaine de minutes.");
+            boolean menuEnded = false;
 
-        List<ExternalItemDTO> externalItemList = pollExternalDataset();
-        new ExternalItemDAO(activityConfiguration, server).saveDataRefreshList(externalItemList);
+            while(!menuEnded){
+                GenericDAO genericDAO = new GenericDAO(configuration);
+                boolean initializedDB = genericDAO.serverInitialized(server);
+
+                String dateDernierRefreshTaux = genericDAO.getDateDernierRefreshTaux(server);
+                String dateDernierRefreshPrix = genericDAO.getDateDernierRefreshPrix(server);
+
+                displayMenu(initializedDB, dateDernierRefreshTaux, dateDernierRefreshPrix);
+
+                int choix = UserInputHelper.readUserInputAsInteger();
+
+                if(!initializedDB){
+                    switch (choix){
+                        case 1:
+                            DataRefreshActivity.refreshCompleteData(server, activityConfiguration);
+                            break;
+                        case 0:
+                            menuEnded = true;
+                            break;
+                        default:
+                            System.err.println("Valeur incorrecte saisie. Veuillez réessayer.");
+                    }
+                }
+                else{
+                    switch (choix){
+                        case 1:
+                            DataRefreshActivity.refreshCompleteData(server, activityConfiguration);
+                            break;
+                        case 2 :
+                            DataRefreshActivity.refreshPrices(server, activityConfiguration);
+                            break;
+                        case 3:
+                            DataRefreshActivity.refreshTauxBrisage(server, activityConfiguration);
+                            break;
+                        case 4:
+                            DataRefreshActivity.refreshStats(server, activityConfiguration);
+                            break;
+                        case 0:
+                            menuEnded = true;
+                            break;
+                        default:
+                            System.err.println("Valeur incorrecte saisie. Veuillez réessayer.");
+                    }
+                }
+            }
+        }
+        catch (SQLException se){
+            se.printStackTrace();
+            ExitHandlerHelper.exit("Erreur lors de l'acces a la base de donnees : " + se.getMessage());
+        }
+
+    }
+
+    public static void refreshCompleteData(ServerDTO serverDTO, Configuration configuration){
+        System.out.println("(Ré)initialisation des données pour le serveur " + serverDTO.getNom() + ". Cette opération " +
+                "va prendre une trentaine de minutes.");
+
+        List<ExternalItemDTO> listFromVulbis = new VulbisDAO(server).pollDataFromVulbis(); //1mn
+        List<ExternalItemDTO> listAfterDofusDB = new DofusDBDAO(listFromVulbis).pollDataFromDofusDB(); //20mn
+        List<ExternalItemDTO> listAfterBrifus = new BrifusDAO(listAfterDofusDB, server).pollDataFromBrifus(); //4 mn
+
+        new ExternalItemDAO(activityConfiguration, server).saveDataRefreshList(listAfterBrifus);
 
         System.out.println("Rafraichissement des données terminé");
     }
 
-    private static List<ExternalItemDTO> pollExternalDataset() {
-        /* Collecte des infos Vulbis */
-        List<ExternalItemDTO> listFromVulbis = new VulbisDAO(server).pollDataFromVulbis();
+    public static void refreshPrices(ServerDTO serverDTO, Configuration configuration){
 
-        /* Collecte des infos DofusDB */
-        List<ExternalItemDTO> listAfterDofusDB = new DofusDBDAO(listFromVulbis).pollDataFromDofusDB();
+    }
 
-        /* Collecte des infos dans Brifus */
-        List<ExternalItemDTO> listAfterBrifus = new BrifusDAO(listAfterDofusDB, server).pollDataFromBrifus();
+    public static void refreshTauxBrisage(ServerDTO serverDTO, Configuration configuration){
 
-        return listAfterBrifus;
+    }
+
+    public static void refreshStats(ServerDTO serverDTO, Configuration configuration){
+
+    }
+
+    private static void displayMenu(boolean initializedDB, String dateDernierRefreshTaux, String dateDernierRefreshPrix) {
+        System.out.println(" ");
+        System.out.println("|| ========================================================================= ||");
+        System.out.println("||" + StringHelper.padWithCharacter("Rafraîchissement des données (" + server.getNom() + ")", 75, " ", 3) + "||");
+        System.out.println("|| ========================================================================= ||");
+        System.out.println("||" + StringHelper.padWithCharacter("   1. (Ré)initialisation des données", 75, " ", 2) + "||");
+
+        if(initializedDB){
+            System.out.println("||                                                                           ||");
+            System.out.println("||" + StringHelper.padWithCharacter("   2. Rafraîchissement des prix (Dernier refresh : " + dateDernierRefreshPrix + ")", 75, " ", 2) + "||");
+            System.out.println("||" + StringHelper.padWithCharacter("   3. Rafraîchissement des taux (Dernier refresh : " + dateDernierRefreshTaux + ")", 75, " ", 2) + "||");
+            System.out.println("||" + StringHelper.padWithCharacter("   4. Rafraîchissement des stats", 75, " ", 2) + "||");
+        }
+
+        System.out.println("||                                                                           ||");
+        System.out.println("|| ------------------------------------------------------------------------- ||");
+        System.out.println("||" + StringHelper.padWithCharacter("   0. Revenir au menu", 75, " ", 2) + "||");
+        System.out.println("|| ========================================================================= ||");
+        System.out.println(" ");
     }
 }

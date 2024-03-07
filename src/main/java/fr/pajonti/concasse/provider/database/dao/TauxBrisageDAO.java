@@ -26,23 +26,25 @@ public class TauxBrisageDAO extends DatabaseDAO {
 
     public void register(TauxBrisageDTO dto) throws SQLException {
 
-        DateTimeFormatter dtfInsertion = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
-        String timestampInsertion = "{ts '" + dtfInsertion.format(dto.getRefreshTimestamp()) + "'}";
+        DateTimeFormatter dtfInsertion = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String timestampInsertion = dtfInsertion.format(dto.getRefreshTimestamp());
 
-        DateTimeFormatter dtfTxRefreshDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
-        String timestampTxRefresh = "{ts '" + dtfTxRefreshDate.format(dto.getTxUpdateTimestamp()) + "'}";
+        DateTimeFormatter dtfTxRefreshDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String timestampTxRefresh = dtfTxRefreshDate.format(dto.getTxUpdateTimestamp());
 
         Statement statement = connection.createStatement();
-        statement.executeUpdate("MERGE INTO TX_BRISAGE " +
-                                        "(VULBIS_ID, SERVER_ID, TAUX, LAST_REFRESH_DATE, LAST_TX_UPDATE_DATE) " +
-                                    "VALUES " +
-                                        "("
-                                            + dto.getVulbisID() + ", "
-                                            + dto.getServerID() + ", "
-                                            + dto.getTauxConcassage() + ", "
-                                            + timestampInsertion + ", "
-                                            + timestampTxRefresh
-                                        + ");");
+        String query = "MERGE INTO TX_BRISAGE " +
+                "(VULBIS_ID, SERVER_ID, TAUX, LAST_REFRESH_DATE, LAST_TX_UPDATE_DATE) " +
+                "VALUES " +
+                "("
+                + dto.getVulbisID() + ", "
+                + dto.getServerID() + ", "
+                + dto.getTauxConcassage() + ", "
+                + "'" + timestampInsertion + "', "
+                + "'" + timestampTxRefresh + "'"
+                + ");";
+
+        statement.executeUpdate(query);
         statement.close();
     }
 }

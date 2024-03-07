@@ -24,7 +24,6 @@ public class NiveauMetierDAO extends DatabaseDAO {
     }
 
     public NiveauMetierDTO getNiveauMetierByMetierIDAndServerId(int metierID, int serverID) throws SQLException {
-        Connection connection = DriverManager.getConnection(this.jdbcURL, this.username, this.password);
         Statement statement = connection.createStatement();
 
         NiveauMetierDTO dto = null;
@@ -35,13 +34,10 @@ public class NiveauMetierDAO extends DatabaseDAO {
             dto = new NiveauMetierDTO(rs.getInt("METIER_ID"), rs.getInt("SERVER_ID"), rs.getInt("NIVEAU"));
         }
 
-        connection.close();
-
         return dto;
     }
 
     public List<NiveauMetierDTO> getNiveauMetierListByServerId(Integer serverID) throws SQLException {
-        Connection connection = DriverManager.getConnection(this.jdbcURL, this.username, this.password);
         Statement statement = connection.createStatement();
 
         List<NiveauMetierDTO> list = new ArrayList<>();
@@ -52,17 +48,13 @@ public class NiveauMetierDAO extends DatabaseDAO {
             list.add(new NiveauMetierDTO(rs.getInt("METIER_ID"), rs.getInt("SERVER_ID"), rs.getInt("NIVEAU")));
         }
 
-        connection.close();
 
         return list;
     }
 
     public void updateNiveauMetier(NiveauMetierDTO niveauMetierDTO) throws SQLException{
-        Connection connection = DriverManager.getConnection(this.jdbcURL, this.username, this.password);
         Statement statement = connection.createStatement();
 
         statement.executeUpdate("UPDATE NIVEAU_METIER SET NIVEAU = " + niveauMetierDTO.getNiveauMetier() + " WHERE METIER_ID = " + niveauMetierDTO.getMetierID() + " AND SERVER_ID = " + niveauMetierDTO.getServerID() + ";");
-
-        connection.close();
     }
 }

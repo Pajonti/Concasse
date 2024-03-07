@@ -48,7 +48,6 @@ public class VulbisDAO {
         List<ExternalItemDTO> listeItems = new ArrayList<>();
         Document document = Jsoup.parse(xml);
         Elements table = document.select("#scanTable").select("tbody").select("tr");
-        int count = 1;
 
         for(Element tableLine : table){
             Elements nameAndIdElements = tableLine.select("td:nth-child(2) > div:nth-child(1) > p");
@@ -105,11 +104,9 @@ public class VulbisDAO {
             dto.setPriceTen(priceTen.trim().isEmpty() || priceTen.trim().equals("-") ? null : Integer.parseInt(priceTen));
             dto.setPriceHundred(priceHundred.trim().isEmpty() || priceHundred.trim().equals("-") ? null : Integer.parseInt(priceHundred));
 
+            System.out.println("Lecture de l'objet " + itemName + " dans Vulbis terminée.");
+
             listeItems.add(dto);
-
-            System.out.println(count);
-            count++;
-
         }
 
         return listeItems;
@@ -130,8 +127,8 @@ public class VulbisDAO {
             page.setDefaultNavigationTimeout(240000);
 
             //Toutes donnees confondues
-//            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=746,2610,13491,8731&percent=0&craftableonly=false&select-type=-1&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
-            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=-1&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
+//            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=-1&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
+            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=9&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
 
             //Ready-check du navigateur
             page.waitForSelector("#scanTable > tbody > tr:nth-child(1) > td:nth-child(2) > div:nth-child(1) > p");

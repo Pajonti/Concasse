@@ -1,6 +1,8 @@
-package fr.pajonti.concasse.provider.external.dto;
+    package fr.pajonti.concasse.provider.external.dto;
 
 import fr.pajonti.concasse.provider.database.dto.StatItemDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 /**
  * DTO stockant les donnees d'item issues des services externes a Concasse (Vulbis, Brifus, DofusDB,...)
  */
+@Getter
+@Setter
 public class ExternalItemDTO {
 
     private String itemName;
@@ -20,10 +24,8 @@ public class ExternalItemDTO {
     private LocalDateTime priceUpdateTimestamp;
     private Integer level;
     private Integer typeId;
+    private boolean estConcassable;
     private List<StatItemDTO> statItemList;
-    /**
-     * Vaut 0 si aucune donnée dans Brifus
-     */
     private Float tauxBrisage;
     private LocalDateTime brifusUpdateDate;
 
@@ -31,107 +33,26 @@ public class ExternalItemDTO {
         statItemList = new ArrayList<>();
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public Integer getItemID() {
-        return itemID;
-    }
-
-    public void setItemID(Integer itemID) {
-        this.itemID = itemID;
-    }
-
-    public String getRecipeString() {
-        return recipeString;
-    }
-
-    public void setRecipeString(String recipeString) {
-        this.recipeString = recipeString;
-    }
-
-    public Integer getPriceOne() {
-        return priceOne;
-    }
-
-    public void setPriceOne(Integer priceOne) {
-        this.priceOne = priceOne;
-    }
-
-    public Integer getPriceTen() {
-        return priceTen;
-    }
-
-    public void setPriceTen(Integer priceTen) {
-        this.priceTen = priceTen;
-    }
-
-    public Integer getPriceHundred() {
-        return priceHundred;
-    }
-
-    public void setPriceHundred(Integer priceHundred) {
-        this.priceHundred = priceHundred;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
-
-    public List<StatItemDTO> getStatItemList() {
-        return statItemList;
-    }
-
-    public void setStatItemList(List<StatItemDTO> statItemList) {
-        this.statItemList = statItemList;
-    }
-
-   public void addStatItem(StatItemDTO statItemDTO){
+    public void addStatItem(StatItemDTO statItemDTO){
         this.statItemList.add(statItemDTO);
-   }
-
-    public Float getTauxBrisage() {
-        return tauxBrisage;
-    }
-
-    public void setTauxBrisage(Float tauxBrisage) {
-        this.tauxBrisage = tauxBrisage;
-    }
-
-    public LocalDateTime getBrifusUpdateDate() {
-        return brifusUpdateDate;
-    }
-
-    public void setBrifusUpdateDate(LocalDateTime brifusUpdateDate) {
-        this.brifusUpdateDate = brifusUpdateDate;
-    }
-
-    public LocalDateTime getPriceUpdateTimestamp() {
-        return priceUpdateTimestamp;
-    }
-
-    public void setPriceUpdateTimestamp(LocalDateTime priceUpdateTimestamp) {
-        this.priceUpdateTimestamp = priceUpdateTimestamp;
     }
 
     public boolean estCraftable() {
        return this.getRecipeString() != null && !this.getRecipeString().trim().isEmpty();
+    }
+
+    public boolean possedeStats(){
+        if(this.statItemList.isEmpty()){
+            return false;
+        }
+
+        //Si au moins une stat est positive, alors l'item est concassable
+        for(StatItemDTO statItem : this.statItemList){
+            if(statItem.getStatLower() >= 0 && statItem.getStatUpper() >= 0){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

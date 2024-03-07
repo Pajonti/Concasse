@@ -24,6 +24,7 @@
         <jackson.version>2.16.1</jackson.version>
         <jsoup.version>1.17.2</jsoup.version>
         <guava.version>33.0.0-jre</guava.version>
+        <lombok.version>1.18.30</lombok.version>
 
         <!-- Plugins -->
         <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
@@ -71,6 +72,13 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+
+        <!-- Lombok for item management helpers -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
 
     </dependencies>

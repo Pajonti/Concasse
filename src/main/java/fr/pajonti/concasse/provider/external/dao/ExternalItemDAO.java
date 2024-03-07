@@ -51,7 +51,7 @@ public class ExternalItemDAO {
             ItemDAO dao = new ItemDAO(this.configuration);
             for(ExternalItemDTO dto : externalItemList){
                 System.out.println("Sauvegarde de l'item " + dto.getItemName());
-                ItemDTO itemDTO = new ItemDTO(dto.getItemID(), dto.getItemName(), dto.getTypeId());
+                ItemDTO itemDTO = new ItemDTO(dto.getItemID(), dto.getItemName(), dto.getTypeId(), dto.isEstConcassable());
                 dao.register(itemDTO);
             }
         } catch (SQLException e) {
@@ -79,15 +79,33 @@ public class ExternalItemDAO {
         System.out.println("Sauvegarde des recettes en base");
         try{
             RecipeDAO dao = new RecipeDAO(this.configuration);
+            ItemDAO itemDAO = new ItemDAO(this.configuration);
+
             for(ExternalItemDTO dto : externalItemList){
                 if(dto.estCraftable()){
-                    System.out.println("Sauvegarde de la recette de l'item " + dto.getItemName());
+                    System.out.println("Recherche de la presence de tous les composants de l'item " + dto.getItemName());
+                    boolean completeRecipe = true;
 
                     for(String compo : dto.getRecipeString().split(",")){
                         String[] compQty = compo.split("\\|");
+                        Integer componentID = Integer.parseInt(compQty[0]);
 
-                        RecipeDTO itemDTO = new RecipeDTO(dto.getItemID(), Integer.parseInt(compQty[0]), Integer.parseInt(compQty[1]));
-                        dao.register(itemDTO);
+                        ItemDTO component = itemDAO.loadItemByID(componentID);
+                        if(component == null){
+                            System.err.println("Recette ignoree : Composant " + componentID + " inconnu.");
+                            completeRecipe = false;
+                        }
+                    }
+
+                    if(completeRecipe){
+                        System.out.println("Sauvegarde de la recette de l'item " + dto.getItemName());
+
+                        for(String compo : dto.getRecipeString().split(",")){
+                            String[] compQty = compo.split("\\|");
+
+                            RecipeDTO itemDTO = new RecipeDTO(dto.getItemID(), Integer.parseInt(compQty[0]), Integer.parseInt(compQty[1]));
+                            dao.register(itemDTO);
+                        }
                     }
                 }
             }
@@ -102,7 +120,7 @@ public class ExternalItemDAO {
         try{
             StatItemDAO dao = new StatItemDAO(this.configuration);
             for(ExternalItemDTO dto : externalItemList){
-                System.out.println("Sauvegarde de la recette de l'item " + dto.getItemName());
+                System.out.println("Sauvegarde des stats de l'item " + dto.getItemName());
 
                 for(StatItemDTO statDTO : dto.getStatItemList()){
                     dao.register(statDTO);
@@ -122,7 +140,7 @@ public class ExternalItemDAO {
                 if(dto.estCraftable() && dto.getTauxBrisage() != null && dto.getTauxBrisage() > 0f){
                     System.out.println("Sauvegarde du taux de brisage de " + dto.getItemName());
 
-                    TauxBrisageDTO itemDTO = new TauxBrisageDTO(dto.getItemID(), server.getServerID(), dto.getTauxBrisage(), LocalDateTime.now(), dto.getPriceUpdateTimestamp());
+                    TauxBrisageDTO itemDTO = new TauxBrisageDTO(dto.getItemID(), server.getServerID(), dto.getTauxBrisage(), LocalDateTime.now(), dto.getBrifusUpdateDate());
                     dao.register(itemDTO);
                 }
             }

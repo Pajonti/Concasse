@@ -9,10 +9,7 @@ import fr.pajonti.concasse.provider.external.dto.ExternalItemDTO;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class DofusDBDAO {
 
@@ -31,6 +28,7 @@ public class DofusDBDAO {
             if(itemEnrichi != null){
                 listeEnrichie.add(itemEnrichi);
             }
+            System.out.println("Lecture de l'objet " + itemInitial.getItemName() + " dans DofusDB terminée.");
         }
 
         return listeEnrichie;
@@ -64,6 +62,7 @@ public class DofusDBDAO {
 
                 itemInitial.setLevel(levelNode.asInt());
                 itemInitial.setTypeId(typeNode.asInt());
+                itemInitial.setEstConcassable(definirConcassable(typeNode.asInt()));
 
                 for (Iterator<JsonNode> it = statsNode.elements(); it.hasNext(); ) {
                     JsonNode statNode = it.next();
@@ -73,14 +72,18 @@ public class DofusDBDAO {
                     Integer statTo = statNode.path("to").asInt();
 
                     boolean estNegative = (statFrom < 0 && statTo < 0);
+                    boolean statEstRelevant = statId >= 0;
 
-                    //Si la stat est négative, on inverse le from et le to
-                    itemInitial.addStatItem(new StatItemDTO(
-                            (estNegative ? statTo : statFrom),
-                            (estNegative ? statFrom : statTo),
-                            itemInitial.getItemID(),
-                            statId
-                    ));
+                    if(statEstRelevant){
+                        //Si la stat est négative, on inverse le from et le to
+                        itemInitial.addStatItem(new StatItemDTO(
+                                (estNegative ? statTo : statFrom),
+                                (estNegative ? statFrom : statTo),
+                                itemInitial.getItemID(),
+                                statId
+                        ));
+                    }
+
                 }
             }
             else{
@@ -93,6 +96,30 @@ public class DofusDBDAO {
             ExitHandlerHelper.exit("Erreur lors de la collecte des infos DofusDB : " + ioe.getMessage());
         }
 
-        return null;
+        return itemInitial;
+    }
+
+    private boolean definirConcassable(Integer typeItem) {
+        Set<Integer> set = new HashSet<>();
+
+        set.add(2);     //Arc
+        set.add(4);     //Baton
+        set.add(3);     //Baguette
+        set.add(1);     //Amulette
+        set.add(9);     //Anneau
+        set.add(5);     //Dague
+        set.add(22);    //Faux
+        set.add(19);    //Hache
+        set.add(7);     //Marteau
+        set.add(8);     //Pelle
+        set.add(21);    //Pioche
+        set.add(6);     //Epee
+        set.add(16);    //Cape
+        set.add(17);    //Chapeau
+        set.add(10);    //Ceinture
+        set.add(11);    //Bottes
+        set.add(82);    //Bouclier
+
+        return set.stream().anyMatch(i -> Objects.equals(i, typeItem));
     }
 }
