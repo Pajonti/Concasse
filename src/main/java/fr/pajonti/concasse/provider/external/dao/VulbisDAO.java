@@ -127,8 +127,8 @@ public class VulbisDAO {
             page.setDefaultNavigationTimeout(240000);
 
             //Toutes donnees confondues
-//            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=-1&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
-            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=9&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
+            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=-1&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
+//            page.navigate("https://www.vulbis.com/?server=" + server.getNom().replace(" ", "%20") + "&gids=&percent=0&craftableonly=false&select-type=9&sellchoice=false&buyqty=1&sellqty=1&percentsell=0");
 
             //Ready-check du navigateur
             page.waitForSelector("#scanTable > tbody > tr:nth-child(1) > td:nth-child(2) > div:nth-child(1) > p");

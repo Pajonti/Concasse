@@ -149,4 +149,12 @@ public class ExternalItemDAO {
             ExitHandlerHelper.exit("Erreur lors de l'insertion en base d'un taux de brisage : " + e.getMessage());
         }
     }
+
+    public void saveVulbisDataOnly(List<ExternalItemDTO> listFromVulbis) {
+        this.savePricesIntoDatabase(listFromVulbis);
+    }
+
+    public void saveBrifusDataOnly(List<ExternalItemDTO> listFromDatabase) {
+        this.saveTauxBrisageIntoDatabase(listFromDatabase);
+    }
 }

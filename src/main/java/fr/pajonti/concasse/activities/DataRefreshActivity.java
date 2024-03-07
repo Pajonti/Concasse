@@ -8,10 +8,8 @@ import fr.pajonti.concasse.helper.technical.StringHelper;
 import fr.pajonti.concasse.helper.technical.UserInputHelper;
 import fr.pajonti.concasse.provider.database.dao.GenericDAO;
 import fr.pajonti.concasse.provider.database.dao.NiveauMetierDAO;
-import fr.pajonti.concasse.provider.database.dto.MetierDTO;
-import fr.pajonti.concasse.provider.database.dto.NiveauMetierDTO;
-import fr.pajonti.concasse.provider.database.dto.ServerDTO;
-import fr.pajonti.concasse.provider.database.dto.StatItemDTO;
+import fr.pajonti.concasse.provider.database.dao.TauxBrisageDAO;
+import fr.pajonti.concasse.provider.database.dto.*;
 import fr.pajonti.concasse.provider.external.dao.BrifusDAO;
 import fr.pajonti.concasse.provider.external.dao.DofusDBDAO;
 import fr.pajonti.concasse.provider.external.dao.ExternalItemDAO;
@@ -75,9 +73,6 @@ public class DataRefreshActivity {
                         case 3:
                             DataRefreshActivity.refreshTauxBrisage(server, activityConfiguration);
                             break;
-                        case 4:
-                            DataRefreshActivity.refreshStats(server, activityConfiguration);
-                            break;
                         case 0:
                             menuEnded = true;
                             break;
@@ -108,15 +103,32 @@ public class DataRefreshActivity {
     }
 
     public static void refreshPrices(ServerDTO serverDTO, Configuration configuration){
+        List<ExternalItemDTO> listFromVulbis = new VulbisDAO(server).pollDataFromVulbis();
 
+        new ExternalItemDAO(activityConfiguration, server).saveVulbisDataOnly(listFromVulbis);
     }
 
-    public static void refreshTauxBrisage(ServerDTO serverDTO, Configuration configuration){
+    public static void refreshTauxBrisage(ServerDTO serverDTO, Configuration configuration) throws SQLException {
+        TauxBrisageDAO tauxBrisageDAO = new TauxBrisageDAO(configuration);
+        List<TauxBrisageDTO> taux = tauxBrisageDAO.getTauxConnus(serverDTO);
+        List<ExternalItemDTO> listFromDatabase = new ArrayList<>();
 
-    }
+        for(TauxBrisageDTO brisage : taux){
+            ExternalItemDTO external = new ExternalItemDTO();
 
-    public static void refreshStats(ServerDTO serverDTO, Configuration configuration){
+            external.setEstConcassable(true);
+            external.setItemID(brisage.getVulbisID());
+            external.setTauxBrisage(brisage.getTauxConcassage());
+            external.setItemName("###");
+            external.setRecipeString("###");
+            external.addStatItem(new StatItemDTO(10, 20, brisage.getVulbisID(), 2)); // Stat factice
 
+            listFromDatabase.add(external);
+        }
+
+        List<ExternalItemDTO> listAfterBrifus = new BrifusDAO(listFromDatabase, server).pollDataFromBrifus();
+
+        new ExternalItemDAO(activityConfiguration, server).saveBrifusDataOnly(listAfterBrifus);
     }
 
     private static void displayMenu(boolean initializedDB, String dateDernierRefreshTaux, String dateDernierRefreshPrix) {
