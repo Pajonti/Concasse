@@ -94,7 +94,7 @@ public class ConcasseCraftActivity {
                     }
 
                     if(inclureCraftEtRevente && yieldRevente > bestYield){
-                        System.out.println("Meilleur yield revente : " + craft.getItem().getName() + " : Y=" + yieldRevente);
+                        craft.displayBISResell();
                         bestYield = yieldRevente;
                     }
                 }

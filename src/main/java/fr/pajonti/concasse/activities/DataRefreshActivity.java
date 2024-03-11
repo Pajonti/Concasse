@@ -142,7 +142,6 @@ public class DataRefreshActivity {
             System.out.println("||                                                                           ||");
             System.out.println("||" + StringHelper.padWithCharacter("   2. Rafraîchissement des prix (Dernier refresh : " + dateDernierRefreshPrix + ")", 75, " ", 2) + "||");
             System.out.println("||" + StringHelper.padWithCharacter("   3. Rafraîchissement des taux (Dernier refresh : " + dateDernierRefreshTaux + ")", 75, " ", 2) + "||");
-            System.out.println("||" + StringHelper.padWithCharacter("   4. Rafraîchissement des stats", 75, " ", 2) + "||");
         }
 
         System.out.println("||                                                                           ||");

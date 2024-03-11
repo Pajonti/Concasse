@@ -462,4 +462,100 @@ public class CraftDTO {
         System.out.println("| --------------------------------------------------------------------------- |");
         System.out.println(" ");
     }
+
+    public void displayBISResell() throws SQLException {
+        LocalDateTime dateDernierRefresh = priceDAO.getDateTimeRefreshVulbis(serverDTO);
+        Integer coutTotalCraft = 0;
+        Integer revenuTotalCraft = 0;
+
+        System.out.println("| --------------------------------------------------------------------------- |");
+        System.out.println("| " + StringHelper.padWithCharacter(this.item.getName(), 65, " ", 2) + "|" + StringHelper.padWithCharacter("x" + this.getNombreItemsACraft(), 10, " ", 3) + "|");
+        System.out.println("| --------------------------------------------------------------------------- |");
+        System.out.println("| Ingrédients (Dernier refresh des prix au " + dateDernierRefresh + ") :             |");
+
+        for (Map.Entry<ItemDTO, Map<Integer, Integer>> ingredient : listeCourses.entrySet()) {
+            ItemDTO composant = ingredient.getKey();
+            Map<Integer, Integer> nombreAchats = ingredient.getValue();
+            PriceDTO pricing = priceDAO.getPriceForItem(composant.getId(), serverDTO);
+
+            Integer quantiteTotale = nombreAchats.get(1) + nombreAchats.get(10) * 10 + nombreAchats.get(100) * 100;
+
+            Integer pricingTotal = nombreAchats.get(1) * pricing.getPriceOne() + nombreAchats.get(10) * pricing.getPriceTen() + nombreAchats.get(100) * pricing.getPriceHundred();
+            coutTotalCraft += pricingTotal;
+
+            System.out.println("|   - "
+                    + StringHelper.padWithCharacter("x" + quantiteTotale + " ", 8, " ", 2)
+                    + StringHelper.padWithCharacter(composant.getName(), 35, " ", 2)
+                    + StringHelper.padWithCharacter("pour " + pricingTotal + " K", 18, " ", 2)
+                    + "           |");
+
+            if (nombreAchats.get(1) != null && nombreAchats.get(1) > 0) {
+                System.out.println("|     > "
+                        + StringHelper.padWithCharacter("x" + nombreAchats.get(1) + " stacks de 1 à " + pricing.getPriceOne() + " K / Stack", 70, " ", 2)
+                        + "|"
+                );
+            }
+
+            if (nombreAchats.get(10) != null && nombreAchats.get(10) > 0) {
+                System.out.println("|     > "
+                        + StringHelper.padWithCharacter("x" + nombreAchats.get(10) + " stacks de 10 à " + pricing.getPriceTen() + " K / Stack", 70, " ", 2)
+                        + "|"
+                );
+            }
+
+            if (nombreAchats.get(100) != null && nombreAchats.get(100) > 0) {
+                System.out.println("|     > "
+                        + StringHelper.padWithCharacter("x" + nombreAchats.get(100) + " stacks de 100 à " + pricing.getPriceHundred() + " K / Stack", 70, " ", 2)
+                        + "|"
+                );
+            }
+        }
+
+        System.out.println("|" + StringHelper.padWithCharacter(" ", 77, " ", 2) + "|");
+        System.out.println("|" + StringHelper.padWithCharacter(" Action : Craft et revente", 77, " ", 2) + "|");
+        System.out.println("|" + StringHelper.padWithCharacter(" ", 77, " ", 2) + "|");
+
+        Map<Integer, Integer> mapPrixVente = new HashMap<>();
+        mapPrixVente.put(1, this.nombreItemsACraft);
+        mapPrixVente.put(10, 0);
+        mapPrixVente.put(100, 0);
+
+        PriceDTO prixItem = priceDAO.getPriceForItem(this.item.getId(), serverDTO);
+
+        mapPrixVente = optimiserMapQuantitesSelonPrix(mapPrixVente, prixItem);
+        Integer pricingTotal = mapPrixVente.get(1) * prixItem.getPriceOne() + mapPrixVente.get(10) * prixItem.getPriceTen() + mapPrixVente.get(100) * prixItem.getPriceHundred();
+
+        System.out.println("|" + StringHelper.padWithCharacter(" Prix de vente estimé : " + pricingTotal + " K", 77, " ", 2) + "|");
+
+        if (mapPrixVente.get(1) != null && mapPrixVente.get(1) > 0) {
+            System.out.println("|     > "
+                    + StringHelper.padWithCharacter("x" + mapPrixVente.get(1) + " ", 5, " ", 2)
+                    + StringHelper.padWithCharacter("   stacks de 1 à " + prixItem.getPriceOne() + " K / Stack", 65, " ", 2)
+                    + "|"
+            );
+        }
+
+        if (mapPrixVente.get(10) != null && mapPrixVente.get(10) > 0) {
+            System.out.println("|     > "
+                    + StringHelper.padWithCharacter("x" + mapPrixVente.get(10) + " ", 5, " ", 2)
+                    + StringHelper.padWithCharacter("   stacks de 10 à " + prixItem.getPriceTen() + " K / Stack", 65, " ", 2)
+                    + "|"
+            );
+        }
+
+        if (mapPrixVente.get(100) != null && mapPrixVente.get(100) > 0) {
+            System.out.println("|     > "
+                    + StringHelper.padWithCharacter("x" + mapPrixVente.get(100) + " ", 5, " ", 2)
+                    + StringHelper.padWithCharacter("   stacks de 100 à " + prixItem.getPriceHundred() + " K / Stack", 65, " ", 2)
+                    + "|"
+            );
+        }
+
+        System.out.println("| --------------------------------------------------------------------------- |");
+        System.out.println("| Coût : " + StringHelper.padWithCharacter(String.valueOf(coutTotalCraft), 14, " ", 1) + " K " +
+                "| Revenu : " + StringHelper.padWithCharacter(String.valueOf(pricingTotal), 12, " ", 1) + " K " +
+                "| Rendement : " + StringHelper.padWithCharacter(new DecimalFormat("####0.000").format((float) pricingTotal / coutTotalCraft), 11, " ", 1)  + " |");
+        System.out.println("| --------------------------------------------------------------------------- |");
+        System.out.println(" ");
+    }
 }
