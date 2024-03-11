@@ -15,4 +15,4 @@ build_artifacts:
     - mvn clean package
   artifacts:
     paths:
-      - Concasse.zip
+      - target/Concasse.zip
