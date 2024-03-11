@@ -86,7 +86,8 @@ public class DofusDBDAO {
 
                     boolean statEstRelevant = statId >= 0 && statUpper != 0 && statLower != 0;
 
-                    if(statEstRelevant && (category == 0 || category == 1)){
+                    //On bloque la stat max pour rejeter les valeurs aberrantes
+                    if(statEstRelevant && (category == 0 || category == 1) && statUpper < 1800){
                         //Si la stat est négative, on inverse le from et le to
                         itemInitial.addStatItem(new StatItemDTO(
                                 statLower,
