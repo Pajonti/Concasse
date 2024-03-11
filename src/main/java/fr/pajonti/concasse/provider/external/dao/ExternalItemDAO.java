@@ -51,7 +51,7 @@ public class ExternalItemDAO {
             ItemDAO dao = new ItemDAO(this.configuration);
             for(ExternalItemDTO dto : externalItemList){
                 System.out.println("Sauvegarde de l'item " + dto.getItemName());
-                ItemDTO itemDTO = new ItemDTO(dto.getItemID(), dto.getItemName(), dto.getTypeId(), dto.isEstConcassable());
+                ItemDTO itemDTO = new ItemDTO(dto.getItemID(), dto.getItemName(), dto.getTypeId(), dto.isEstConcassable(), dto.getLevel());
                 dao.register(itemDTO);
             }
         } catch (SQLException e) {

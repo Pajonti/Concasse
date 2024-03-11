@@ -8,12 +8,14 @@ public class ItemDTO {
     private final String name;
     private final Integer typeID;
     private final boolean estConcassable;
+    private final Integer level;
 
-    public ItemDTO(Integer id, String name, Integer typeID, boolean estConcassable) {
+    public ItemDTO(Integer id, String name, Integer typeID, boolean estConcassable, Integer level) {
         this.id = id;
         this.name = name;
         this.typeID = typeID;
         this.estConcassable = estConcassable;
+        this.level = level;
     }
 
 }

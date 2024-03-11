@@ -2,6 +2,7 @@ package fr.pajonti.concasse.provider.database.dao;
 
 import fr.pajonti.concasse.configuration.Configuration;
 import fr.pajonti.concasse.provider.database.DatabaseDAO;
+import fr.pajonti.concasse.provider.database.dto.ItemDTO;
 import fr.pajonti.concasse.provider.database.dto.RuneDTO;
 import fr.pajonti.concasse.provider.database.dto.StatEnum;
 
@@ -141,6 +142,19 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(18723, StatEnum.RESISTANCE_POURCENTAGE_MELEE.getStatCode(), 1, (float) 6));
         list.add(new RuneDTO(18724, StatEnum.RESISTANCE_POURCENTAGE_DISTANTS.getStatCode(), 1, (float) 6));
 
+
+        return list;
+    }
+
+    public List<RuneDTO> getRunes() throws SQLException {
+        List<RuneDTO> list = new ArrayList<>();
+        Statement statement = connection.createStatement();
+
+        ResultSet rs = statement.executeQuery("SELECT * FROM RUNE;");
+
+        while(rs.next()){
+            list.add(new RuneDTO(rs.getInt("VULBIS_ID"), rs.getInt("STAT_ID"), rs.getInt("TIER"), rs.getFloat("WEIGHT")));
+        }
 
         return list;
     }

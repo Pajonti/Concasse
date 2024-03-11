@@ -28,4 +28,18 @@ public class StatItemDTO {
     public Integer getStatID() {
         return statID;
     }
+
+    public Integer getStatMoyenne() {
+        //En cas de stat statique positive:
+        if(this.statLower == 0 && this.statUpper > 0){
+            return statUpper;
+        }
+
+        //En cas de stat statique negative:
+        if(this.statLower < 0 && this.statUpper == 0){
+            return statLower;
+        }
+
+        return (statUpper + statLower) / 2;
+    }
 }

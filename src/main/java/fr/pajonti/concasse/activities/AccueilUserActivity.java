@@ -1,7 +1,7 @@
 package fr.pajonti.concasse.activities;
 
+import fr.pajonti.concasse.activities.moneymaking.ConcasseCraftActivity;
 import fr.pajonti.concasse.configuration.Configuration;
-import fr.pajonti.concasse.helper.technical.StringHelper;
 import fr.pajonti.concasse.helper.technical.UserInputHelper;
 import fr.pajonti.concasse.provider.database.dto.ServerDTO;
 
@@ -27,7 +27,7 @@ public class AccueilUserActivity {
                     JobSettingActivity.setJobs(serverDTO, configuration);
                     break;
                 case 3:
-                    System.out.println("TODO : Calcul brisage");
+                    ConcasseCraftActivity.run(serverDTO, configuration);
                     break;
                 case 9 :
                     serverDTO = ServerChooserActivity.chooseServer(configuration);

@@ -67,18 +67,30 @@ public class DofusDBDAO {
                 for (Iterator<JsonNode> it = statsNode.elements(); it.hasNext(); ) {
                     JsonNode statNode = it.next();
 
-                    Integer statId = statNode.path("characteristic").asInt();
-                    Integer statFrom = statNode.path("from").asInt();
-                    Integer statTo = statNode.path("to").asInt();
+                    //Category = 0 -> Uniquement les stats de l'item en flat ou %, pas ses autres effets
+                    int category = statNode.path("category").asInt();
+                    int statId = statNode.path("characteristic").asInt();
+                    int statFrom = statNode.path("from").asInt();
+                    int statTo = statNode.path("to").asInt();
 
-                    boolean estNegative = (statFrom < 0 && statTo < 0);
-                    boolean statEstRelevant = statId >= 0;
+                    int statUpper = Math.max(statFrom, statTo);
+                    int statLower = Math.min(statFrom, statTo);
 
-                    if(statEstRelevant){
+                    if(statUpper > 0 && statLower == 0){
+                        statLower = statUpper;
+                    }
+
+                    if(statLower < 0 && statUpper == 0){
+                        statUpper = statLower;
+                    }
+
+                    boolean statEstRelevant = statId >= 0 && statUpper != 0 && statLower != 0;
+
+                    if(statEstRelevant && (category == 0 || category == 1)){
                         //Si la stat est négative, on inverse le from et le to
                         itemInitial.addStatItem(new StatItemDTO(
-                                (estNegative ? statTo : statFrom),
-                                (estNegative ? statFrom : statTo),
+                                statLower,
+                                statUpper,
                                 itemInitial.getItemID(),
                                 statId
                         ));

@@ -1,7 +1,10 @@
 package fr.pajonti.concasse.provider.database.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class PriceDTO {
     private final Integer vulbisID;
     private final Integer serverID;
@@ -21,31 +24,4 @@ public class PriceDTO {
         this.priceUpdateTimestamp = priceUpdateTimestamp;
     }
 
-    public Integer getVulbisID() {
-        return vulbisID;
-    }
-
-    public Integer getServerID() {
-        return serverID;
-    }
-
-    public Integer getPriceOne() {
-        return priceOne;
-    }
-
-    public Integer getPriceTen() {
-        return priceTen;
-    }
-
-    public Integer getPriceHundred() {
-        return priceHundred;
-    }
-
-    public LocalDateTime getRefreshTimestamp() {
-        return refreshTimestamp;
-    }
-
-    public LocalDateTime getPriceUpdateTimestamp() {
-        return priceUpdateTimestamp;
-    }
 }

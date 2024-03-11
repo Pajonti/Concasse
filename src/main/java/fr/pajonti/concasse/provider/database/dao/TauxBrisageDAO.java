@@ -73,4 +73,22 @@ public class TauxBrisageDAO extends DatabaseDAO {
 
         return liste;
     }
+
+    public TauxBrisageDTO getTauxItem(Integer itemID, ServerDTO serverDTO) throws SQLException {
+        TauxBrisageDTO dto = null;
+
+        Statement statement = connection.createStatement();
+        DateTimeFormatter dtfInsertion = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ResultSet rs = statement.executeQuery("SELECT VULBIS_ID, SERVER_ID, TAUX, LAST_REFRESH_DATE, LAST_TX_UPDATE_DATE FROM TX_BRISAGE WHERE SERVER_ID = " + serverDTO.getServerID() + " AND VULBIS_ID = " + itemID);
+
+        while(rs.next()){
+            LocalDateTime lastRefreshDateLDT = LocalDateTime.parse(rs.getString("LAST_REFRESH_DATE"), dtfInsertion);
+            LocalDateTime lastTxUpdateDateLDT = LocalDateTime.parse(rs.getString("LAST_TX_UPDATE_DATE"), dtfInsertion);
+
+            dto = new TauxBrisageDTO(rs.getInt("VULBIS_ID"), rs.getInt("SERVER_ID"), rs.getFloat("TAUX"), lastRefreshDateLDT, lastTxUpdateDateLDT);
+        }
+
+        return dto;
+    }
 }
