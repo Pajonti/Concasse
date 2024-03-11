@@ -361,7 +361,7 @@ public class CraftDTO {
         System.out.println("| --------------------------------------------------------------------------- |");
         System.out.println("| " + StringHelper.padWithCharacter(this.item.getName(), 65, " ", 2) + "|" + StringHelper.padWithCharacter("x" + this.getNombreItemsACraft(), 10, " ", 3) + "|");
         System.out.println("| --------------------------------------------------------------------------- |");
-        System.out.println("| Ingrédients (Dernier refresh des prix au " + dateDernierRefresh + ") :             |");
+        System.out.println("| Ingrédients (Prix au " + dateDernierRefresh + ") :                                 |");
 
         TauxBrisageDTO tauxBrisageDTO = tauxBrisageDAO.getTauxItem(this.getItem().getId(), serverDTO);
         for (Map.Entry<ItemDTO, Map<Integer, Integer>> ingredient : listeCourses.entrySet()) {
@@ -471,7 +471,7 @@ public class CraftDTO {
         System.out.println("| --------------------------------------------------------------------------- |");
         System.out.println("| " + StringHelper.padWithCharacter(this.item.getName(), 65, " ", 2) + "|" + StringHelper.padWithCharacter("x" + this.getNombreItemsACraft(), 10, " ", 3) + "|");
         System.out.println("| --------------------------------------------------------------------------- |");
-        System.out.println("| Ingrédients (Dernier refresh des prix au " + dateDernierRefresh + ") :             |");
+        System.out.println("| Ingrédients (Prix au " + dateDernierRefresh + ") :                                 |");
 
         for (Map.Entry<ItemDTO, Map<Integer, Integer>> ingredient : listeCourses.entrySet()) {
             ItemDTO composant = ingredient.getKey();
