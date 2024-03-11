@@ -9,7 +9,7 @@ stages:
 - build
 
 build_artifacts:
-  image: maven:3.6.0-jdk6-slim
+  image: maven:3.6.0-jdk8-slim
   stage: build
   script:
     - mvn clean package
