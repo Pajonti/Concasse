@@ -87,7 +87,7 @@ public class DofusDBDAO {
                     boolean statEstRelevant = statId >= 0 && statUpper != 0 && statLower != 0;
 
                     //On bloque la stat max pour rejeter les valeurs aberrantes
-                    if(statEstRelevant && (category == 0 || category == 1) && statUpper < 1800){
+                    if(statEstRelevant && (category == 0 || category == 1) && statEstNonAberrante(statId, statLower, statUpper)){
                         //Si la stat est négative, on inverse le from et le to
                         itemInitial.addStatItem(new StatItemDTO(
                                 statLower,
@@ -110,6 +110,76 @@ public class DofusDBDAO {
         }
 
         return itemInitial;
+    }
+
+    private boolean statEstNonAberrante(int statId, int statLower, int statUpper) {
+        switch(statId){
+            //Cas speficique : Arme de chasse
+            case 0:
+                return statUpper == 1;
+            //Petites stat : Plafond a 15
+            case 1:
+            case 23:
+            case 19:
+            case 26:
+                return statUpper <= 15;
+            //Stats moyennes : Plafond à 100
+            case 123:
+            case 16:
+            case 18:
+            case 120:
+            case 121:
+            case 124:
+            case 125:
+            case 122:
+            case 142:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 50:
+            case 88:
+            case 89:
+            case 90:
+            case 91:
+            case 92:
+            case 70:
+            case 82:
+            case 83:
+            case 27:
+            case 28:
+            case 49:
+            case 69:
+            case 78:
+            case 79:
+            case 86:
+            case 54:
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+                return statUpper <= 100;
+            //Grosses stat : Plafond à 900
+            case 84:
+            case 85:
+            case 87:
+            case 12:
+            case 25:
+            case 10:
+            case 13:
+            case 14:
+            case 15:
+            case 48:
+            case 11:
+            case 40:
+            case 44:
+            case 29:
+                return statUpper <= 900;
+            //Autres stats manquees : dans le doute on retourne OK
+            default:
+                return true;
+        }
     }
 
     private boolean definirConcassable(Integer typeItem) {

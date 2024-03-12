@@ -66,7 +66,7 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(10618, StatEnum.PUISSANCE.getStatCode(), 2, (float) 2));
         list.add(new RuneDTO(10662, StatEnum.PROSPECTION.getStatCode(), 2, (float) 3));
         list.add(new RuneDTO(11638, StatEnum.FUITE.getStatCode(), 2, (float) 4));
-        list.add(new RuneDTO(11640, StatEnum.TACLE.getStatCode(), 2, (float) 2));
+        list.add(new RuneDTO(11640, StatEnum.TACLE.getStatCode(), 2, (float) 4));
         list.add(new RuneDTO(11642, StatEnum.ESQUIVE_PA.getStatCode(), 2, (float) 7));
         list.add(new RuneDTO(11644, StatEnum.ESQUIVE_PM.getStatCode(), 2, (float) 7));
         list.add(new RuneDTO(11646, StatEnum.RETRAIT_PA.getStatCode(), 2, (float) 7));
@@ -74,7 +74,7 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(11650, StatEnum.DOMMAGES_POUSSEE.getStatCode(), 2, (float) 5));
         list.add(new RuneDTO(11652, StatEnum.RESISTANCE_POUSSEE.getStatCode(), 2, (float) 2));
         list.add(new RuneDTO(11654, StatEnum.DOMMAGES_CRITIQUES.getStatCode(), 2, (float) 5));
-        list.add(new RuneDTO(11656, StatEnum.RESISTANCE_CRITIQUE.getStatCode(), 2, (float) 5));
+        list.add(new RuneDTO(11656, StatEnum.RESISTANCE_CRITIQUE.getStatCode(), 2, (float) 2));
         list.add(new RuneDTO(11658, StatEnum.DOMMAGES_FIXE_TERRE.getStatCode(), 2, (float) 5));
         list.add(new RuneDTO(11660, StatEnum.DOMMAGES_FIXE_FEU.getStatCode(), 2, (float) 5));
         list.add(new RuneDTO(11662, StatEnum.DOMMAGES_FIXE_EAU.getStatCode(), 2, (float) 5));
@@ -99,9 +99,9 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(1558, StatEnum.PM.getStatCode(), 1, (float) 90));
         list.add(new RuneDTO(7433, StatEnum.POURCENTAGE_CRIT.getStatCode(), 1, (float) 10));
         list.add(new RuneDTO(7434, StatEnum.SOIN.getStatCode(), 1, (float) 10));
-        list.add(new RuneDTO(7435, StatEnum.DOMMAGES.getStatCode(), 1, (float) 5));
+        list.add(new RuneDTO(7435, StatEnum.DOMMAGES.getStatCode(), 1, (float) 20));
         list.add(new RuneDTO(7436, StatEnum.PUISSANCE.getStatCode(), 1, (float) 2));
-        list.add(new RuneDTO(7437, StatEnum.DOMMAGES_RENVOI.getStatCode(), 1, (float) 20));
+        list.add(new RuneDTO(7437, StatEnum.DOMMAGES_RENVOI.getStatCode(), 1, (float) 10));
         list.add(new RuneDTO(7438, StatEnum.PORTEE.getStatCode(), 1, (float) 51));
         list.add(new RuneDTO(7442, StatEnum.INVOCATION.getStatCode(), 1, (float) 30));
         list.add(new RuneDTO(7443, StatEnum.PODS.getStatCode(), 1, (float) 0.25));
@@ -121,7 +121,7 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(7560, StatEnum.RESISTANCE_POURCENTAGE_EAU.getStatCode(), 1, (float) 6));
         list.add(new RuneDTO(10057, StatEnum.ARME_CHASSE.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11637, StatEnum.FUITE.getStatCode(), 1, (float) 4));
-        list.add(new RuneDTO(11639, StatEnum.TACLE.getStatCode(), 1, (float) 2));
+        list.add(new RuneDTO(11639, StatEnum.TACLE.getStatCode(), 1, (float) 4));
         list.add(new RuneDTO(11641, StatEnum.ESQUIVE_PA.getStatCode(), 1, (float) 7));
         list.add(new RuneDTO(11643, StatEnum.ESQUIVE_PM.getStatCode(), 1, (float) 7));
         list.add(new RuneDTO(11645, StatEnum.RETRAIT_PA.getStatCode(), 1, (float) 7));
@@ -129,18 +129,18 @@ public class RuneDAO extends DatabaseDAO {
         list.add(new RuneDTO(11649, StatEnum.DOMMAGES_POUSSEE.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11651, StatEnum.RESISTANCE_POUSSEE.getStatCode(), 1, (float) 2));
         list.add(new RuneDTO(11653, StatEnum.DOMMAGES_CRITIQUES.getStatCode(), 1, (float) 5));
-        list.add(new RuneDTO(11655, StatEnum.RESISTANCE_CRITIQUE.getStatCode(), 1, (float) 5));
+        list.add(new RuneDTO(11655, StatEnum.RESISTANCE_CRITIQUE.getStatCode(), 1, (float) 2));
         list.add(new RuneDTO(11657, StatEnum.DOMMAGES_FIXE_TERRE.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11659, StatEnum.DOMMAGES_FIXE_FEU.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11661, StatEnum.DOMMAGES_FIXE_EAU.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11663, StatEnum.DOMMAGES_FIXE_AIR.getStatCode(), 1, (float) 5));
         list.add(new RuneDTO(11665, StatEnum.DOMMAGES_FIXE_NEUTRE.getStatCode(), 1, (float) 5));
-        list.add(new RuneDTO(18719, StatEnum.DOMMAGES_MELEE.getStatCode(), 1, (float) 6));
-        list.add(new RuneDTO(18720, StatEnum.DOMMAGES_A_DISTANCE.getStatCode(), 1, (float) 6));
-        list.add(new RuneDTO(18721, StatEnum.DOMMAGES_ARMES.getStatCode(), 1, (float) 6));
-        list.add(new RuneDTO(18722, StatEnum.DOMMAGES_SORTS.getStatCode(), 1, (float) 6));
-        list.add(new RuneDTO(18723, StatEnum.RESISTANCE_POURCENTAGE_MELEE.getStatCode(), 1, (float) 6));
-        list.add(new RuneDTO(18724, StatEnum.RESISTANCE_POURCENTAGE_DISTANTS.getStatCode(), 1, (float) 6));
+        list.add(new RuneDTO(18719, StatEnum.DOMMAGES_MELEE.getStatCode(), 1, (float) 15));
+        list.add(new RuneDTO(18720, StatEnum.DOMMAGES_A_DISTANCE.getStatCode(), 1, (float) 15));
+        list.add(new RuneDTO(18721, StatEnum.DOMMAGES_ARMES.getStatCode(), 1, (float) 15));
+        list.add(new RuneDTO(18722, StatEnum.DOMMAGES_SORTS.getStatCode(), 1, (float) 15));
+        list.add(new RuneDTO(18723, StatEnum.RESISTANCE_POURCENTAGE_MELEE.getStatCode(), 1, (float) 15));
+        list.add(new RuneDTO(18724, StatEnum.RESISTANCE_POURCENTAGE_DISTANTS.getStatCode(), 1, (float) 15));
 
 
         return list;
