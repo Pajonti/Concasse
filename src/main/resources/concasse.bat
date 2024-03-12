@@ -1,0 +1,1 @@
+java -Dconfig= -jar Concasse.jar
