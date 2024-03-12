@@ -33,13 +33,16 @@ public class BrifusDAO {
 
     public List<ExternalItemDTO> pollDataFromBrifus() {
         List<ExternalItemDTO> listeEnrichie = new ArrayList<>();
+        int count = 1;
+        int listSize = listeInitialeItems.size();
 
         for(ExternalItemDTO itemInitial : this.listeInitialeItems){
             ExternalItemDTO itemEnrichi = enrichirItemWithTauxBrisage(itemInitial);
 
             listeEnrichie.add(itemEnrichi);
 
-            System.out.println("Lecture de l'objet " + itemInitial.getItemName() + " dans Brifus terminée.");
+            System.out.println("[" + count + "/" + listSize +  "] Lecture de l'objet " + itemInitial.getItemName() + " dans Brifus terminée.");
+            count++;
         }
 
         return listeEnrichie;

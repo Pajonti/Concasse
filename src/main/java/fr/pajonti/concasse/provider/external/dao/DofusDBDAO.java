@@ -21,6 +21,8 @@ public class DofusDBDAO {
 
     public List<ExternalItemDTO> pollDataFromDofusDB() {
         List<ExternalItemDTO> listeEnrichie = new ArrayList<>();
+        int count = 1;
+        int listSize = listeInitialeItems.size();
 
         for(ExternalItemDTO itemInitial : this.listeInitialeItems){
             ExternalItemDTO itemEnrichi = enrichirItemWithStatsEtLevel(itemInitial);
@@ -28,7 +30,8 @@ public class DofusDBDAO {
             if(itemEnrichi != null){
                 listeEnrichie.add(itemEnrichi);
             }
-            System.out.println("Lecture de l'objet " + itemInitial.getItemName() + " dans DofusDB terminée.");
+            System.out.println("[" + count + "/" + listSize +  "] Lecture de l'objet " + itemInitial.getItemName() + " dans DofusDB terminée.");
+            count++;
         }
 
         return listeEnrichie;
