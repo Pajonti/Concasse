@@ -42,4 +42,8 @@ public class StatItemDTO {
 
         return (statUpper + statLower) / 2;
     }
+
+    public boolean estFocussable() {
+        return statLower >= 0 && statUpper > 0;
+    }
 }

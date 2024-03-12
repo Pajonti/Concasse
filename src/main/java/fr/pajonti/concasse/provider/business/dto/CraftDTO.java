@@ -191,21 +191,13 @@ public class CraftDTO {
         }
 
         if(!listeStatItemNettoyee.isEmpty()){
-            //On identifie si une stat est negative : On ne sait pas gerer le focus dans ce cas là
-            boolean hasNegativeStat = false;
+            //Pour chaque ligne de stat qui matche une rune et qui est focussable (i.e. une stat > 0), on calcule le rendement en focusant sur cette rune
             for(StatItemDTO ligneStat : listeStatItemNettoyee){
-                if(ligneStat.getStatLower() < 0){
-                    hasNegativeStat = true;
-                }
-            }
-
-            if(!hasNegativeStat){
-                //Pour chaque ligne de stat qui matche une rune, on calcule le rendement en focusant sur cette rune
-                for(StatItemDTO ligneStat : listeStatItemNettoyee){
+                if(ligneStat.estFocussable()){
                     rendementRunesParFocus.put(StatEnum.getEnumByValue(ligneStat.getStatID()), calculerProductionRuneSelonFocus(mapReferenceRunes, StatEnum.getEnumByValue(ligneStat.getStatID()), listeStatItemNettoyee));
                 }
-            }
 
+            }
 
             //On rajoute ensuite une ligne sans focus (StatEenum.NONE)
             rendementRunesParFocus.put(StatEnum.NONE, calculerProductionRuneSansFocus(mapReferenceRunes, listeStatItemNettoyee));
@@ -267,7 +259,7 @@ public class CraftDTO {
 
             float poidsDeBrisage = (3 * jet * poidsStat * level / 200 + 1);
 
-            mapPoidsBrisage.put(stat, poidsDeBrisage);
+            mapPoidsBrisage.put(stat, poidsDeBrisage < 0 ? 0 : poidsDeBrisage);
         }
 
         Float poidsDeBrisagePondereUtiliseFocus = 0f;
