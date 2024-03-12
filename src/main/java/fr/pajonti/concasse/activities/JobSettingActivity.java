@@ -69,10 +69,10 @@ public class JobSettingActivity {
 
                 int niveau = -1;
 
-                while(!(niveau >= 1 && niveau <= 200)){
+                while(!(niveau >= 0 && niveau <= 200)){
                     niveau = UserInputHelper.readUserInputAsInteger();
 
-                    if(!(niveau >= 1 && niveau <= 200)){
+                    if(!(niveau >= 0 && niveau <= 200)){
                         System.err.println("Valeur incorrecte saisie. Veuillez réessayer.");
                     }
                 }

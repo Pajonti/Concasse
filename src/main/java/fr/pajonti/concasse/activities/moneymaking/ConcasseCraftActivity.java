@@ -80,23 +80,27 @@ public class ConcasseCraftActivity {
             float bestYield = 0;
 
             for(CraftDTO craft : listeCrafts){
+                int cashEnRevente = craft.getPrixReventeDirect();
+                int coutCraft = craft.getCoutCraft();
+
+                //Calcul du yield de runes
                 for(Map.Entry<StatEnum, Integer> rendementRunes : craft.getRendementKamasParFocus().entrySet()){
                     int cashGenereSurConcasse = rendementRunes.getValue();
-                    int cashEnRevente = craft.getPrixReventeDirect();
-                    int coutCraft = craft.getCoutCraft();
 
                     float yieldConcasse = (float) cashGenereSurConcasse / coutCraft;
-                    float yieldRevente = (float) cashEnRevente / coutCraft;
 
                     if(yieldConcasse > bestYield && craft.getItem().isEstConcassable()){
                         craft.displayBISConcasse(rendementRunes.getKey());
                         bestYield = yieldConcasse;
                     }
+                }
 
-                    if(inclureCraftEtRevente && yieldRevente > bestYield){
-                        craft.displayBISResell();
-                        bestYield = yieldRevente;
-                    }
+                //Calcul du yield de revente
+                float yieldRevente = (float) cashEnRevente / coutCraft;
+
+                if(inclureCraftEtRevente && yieldRevente > bestYield){
+                    craft.displayBISResell();
+                    bestYield = yieldRevente;
                 }
 
             }
