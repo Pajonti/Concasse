@@ -1,4 +1,4 @@
-package fr.pajonti.concasse.activities.moneymaking;
+package fr.pajonti.concasse.activities.business;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
