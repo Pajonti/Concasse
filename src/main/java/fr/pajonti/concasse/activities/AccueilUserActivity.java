@@ -1,6 +1,6 @@
 package fr.pajonti.concasse.activities;
 
-import fr.pajonti.concasse.activities.moneymaking.ConcasseCraftActivity;
+import fr.pajonti.concasse.activities.business.ConcasseCraftActivity;
 import fr.pajonti.concasse.configuration.Configuration;
 import fr.pajonti.concasse.helper.technical.UserInputHelper;
 import fr.pajonti.concasse.provider.database.dto.ServerDTO;
